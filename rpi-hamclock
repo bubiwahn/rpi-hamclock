@@ -8,12 +8,12 @@ function usage {
     echo "   'start [-s]' -> start server and browser if option -s is given"
     echo "   'stop'       -> stop rpi-hamclock"
     echo "   'update      -> download latest software version" 
-    echo "   'install'    -> bui´ld and install software"
+    echo "   'install'    -> build and install software"
     exit 1
 }
 
 function update {
-    echo "-> update"
+    #echo "-> update"
 
     sudo apt install curl unzip
     rm -rf ESPHamClock
@@ -23,7 +23,7 @@ function update {
 }
 
 function install {
-    echo "-> install"
+    #echo "-> install"
 
     #local RESOLUTION=800x480
     local RESOLUTION=1600x960
@@ -32,14 +32,14 @@ function install {
 
     sudo make g++ # libx11-dev libgpiod-dev
     pushd ESPHamClock
-    make -j 4 hamclock-web-${RESOLUTION}
+    make hamclock-web-${RESOLUTION}
     sudo make install
     popd
     exit 0
 }
 
 function start {
-    echo "-> start ($1)"
+    #echo "-> start ($1)"
 
     local HAMCLOCKURL=http://localhost:8081/live.html
     local DELAY=1
@@ -47,7 +47,7 @@ function start {
     # wait the desktop system
     sleep 30
 
-    if [ "$1" = "surf"] ; then
+    if [ "$1" = "surf" ] ; then
         
         # launch browser
         echo launch surf $HAMCLOCKURL ...
@@ -76,7 +76,7 @@ function start {
 }
 
 function stop {
-    echo "-> stop"
+    #echo "-> stop"
 
     killall surf hamclock
     exit 0
@@ -84,7 +84,7 @@ function stop {
 
 function dispatch {
 
-    #echo "#$#($1, $2)" 
+    #echo "-> dispatch #$# ($1, $2)" 
 
     case "$1" in
 
