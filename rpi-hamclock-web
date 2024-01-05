@@ -13,7 +13,7 @@ function usage {
 }
 
 function update {
-    echo "-> update"
+    #echo "-> update"
 
     sudo apt install curl unzip
     rm -rf ESPHamClock
@@ -23,7 +23,7 @@ function update {
 }
 
 function install {
-    echo "-> install"
+    #echo "-> install"
 
     #local RESOLUTION=800x480
     local RESOLUTION=1600x960
@@ -39,7 +39,7 @@ function install {
 }
 
 function start {
-    echo "-> start ($1)"
+    #echo "-> start ($1)"
 
     local HAMCLOCKURL=http://localhost:8081/live.html
     local DELAY=1
@@ -76,7 +76,7 @@ function start {
 }
 
 function stop {
-    echo "-> stop"
+    #echo "-> stop"
 
     killall surf hamclock
     exit 0
@@ -84,7 +84,7 @@ function stop {
 
 function dispatch {
 
-    #echo "#$#($1, $2)" 
+    #echo "-> dispatch #$# ($1, $2)" 
 
     case "$1" in
 
