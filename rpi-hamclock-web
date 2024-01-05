@@ -8,7 +8,7 @@ function usage {
     echo "   'start [-s]' -> start server and browser if option -s is given"
     echo "   'stop'       -> stop rpi-hamclock"
     echo "   'update      -> download latest software version" 
-    echo "   'install'    -> bui´ld and install software"
+    echo "   'install'    -> build and install software"
     exit 1
 }
 
@@ -47,7 +47,7 @@ function start {
     # wait the desktop system
     sleep 30
 
-    if [ "$1" = "surf"] ; then
+    if [ "$1" = "surf" ] ; then
         
         # launch browser
         echo launch surf $HAMCLOCKURL ...
