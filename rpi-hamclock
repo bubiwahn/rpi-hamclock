@@ -45,7 +45,7 @@ function start {
     local DELAY=1
 
     # wait the desktop system
-    sleep 30
+    sleep 3
 
     if [ "$1" = "surf" ] ; then
         
@@ -55,7 +55,7 @@ function start {
         echo pid=$SURFPID.
 
         # wait for browser ...
-        sleep 30
+        sleep 3
     fi
 
     # launch hamclock
@@ -71,7 +71,7 @@ function start {
 	    curl -s $HAMCLOCKURL > /dev/null
 	    CURLERROR=$?
     done
-    echo "hamclock is up :-)"}
+    echo "hamclock is up :-)"
     exit 0
 }
 
