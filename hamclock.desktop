@@ -1,6 +1,0 @@
-[Desktop Entry]
-Name=HamClock
-Exec=/bin/sh -c '/home/andi/Desktop/surf_hamclock.sh'
-Icon=/home/andi/.hamclock/hamclock.png
-Terminal=false
-Type=Application
