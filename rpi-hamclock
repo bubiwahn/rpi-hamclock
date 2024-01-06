@@ -72,6 +72,10 @@ function start {
 	    CURLERROR=$?
     done
     echo "hamclock is up :-)"
+
+    # reload page
+    kill -HUP $SURFPID
+
     exit 0
 }
 
