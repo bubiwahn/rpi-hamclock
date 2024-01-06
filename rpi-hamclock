@@ -82,7 +82,7 @@ function start {
 function stop {
     #echo "-> stop"
 
-    killall surf hamclock
+    killall -q surf hamclock
     exit 0
 }
 
