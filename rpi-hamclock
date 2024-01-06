@@ -1,51 +1,95 @@
 #!/bin/bash
 
-function usage {
-    echo "usage:"
-    echo "rpi-hamclock <action>"
-    echo
-    echo "  where <action> is one of"
-    echo "   'start [-s]' -> start server and browser if option -s is given"
-    echo "   'stop'       -> stop rpi-hamclock"
-    echo "   'update      -> download latest software version" 
-    echo "   'install'    -> build and install software"
+# configure properties
+function configure {
+    echo "-> configure #$# ($*)"
+
+    # source a config file if available
+    [ -f "rpi-hamlock.conf" ] && . rpi-hamlock.conf
+
+    # set default values if not set
+    : ${HAMCLOCK_RPIHAMCLOCK_GIT_URL:=https://github.com/bubiwahn/rpi-hamclock-web.git}  
+    : ${HAMCLOCK_ESPHAMCLOCK_ZIP_URL:=https://www.clearskyinstitute.com/ham/HamClock/ESPHamClock.zip}
+    : ${HAMCLOCK_BUILD_TARGET:=hamclock-web-1600x960}
+    : ${HAMCLOCK_HOME:=~/rpi-hamclock-web}
+    : ${HAMCLOCK_DESKTOP_FILE:=~hamclock.desktop}
+    : ${HAMCLOCK_DESKTOP_DIR:=~/Desktop}
+    : ${HAMCLOCK_DESKTOP_PATH:=$HAMCLOCK_DESKTOP_DIR/$HAMCLOCK_DESKTOP_FILE}
+    : ${HAMCLOCK_DESKTOP_LINK:=$AUTOSTART_DIR/$HAMCLOCK_DESKTOP_FILE}
+    : ${HAMCLOCK_AUTOSTART_DIR:=~/.config/autostart}
+}
+
+# display command line help and exit with code 1
+function help {
+
+    cat << EOF 
+Web based ESPHamClock on Raspberry Pi install and admin tool.
+
+usage:
+rpi-hamclock <action>
+
+where <action> is one of
+
+    start [-s]          -> start rpi-hamclock service, where
+                            -s : show HamClock on local desktop
+
+    stop                -> stop rpi-hamclock service
+
+    update              -> download latest software release and update 
+
+    install [-d [-a]]   -> build and install software on machine, where
+                            -d : install desktop launcher '$HAMCLOCK_DESKTOP_PATH'
+                            -a : create autostart link '$HAMCLOCK_AUTOSTART_DIR/$HAMCLOCK_DESKTOP_FILE'
+EOF
+
     exit 1
 }
 
+# software update process
 function update {
-    #echo "-> update"
+    echo "-> update #$# ($*)"
 
     sudo apt install curl unzip
     rm -rf ESPHamClock
-    curl -O https://www.clearskyinstitute.com/ham/HamClock/ESPHamClock.zip
+    curl -O $HAMCLOCK_ESPHAMCLOCK_ZIP_URL
     unzip ESPHamClock.zip
     exit 0
 }
 
-function install {
-    #echo "-> install"
+function install_desktop {
+    echo "-> install_desktop #$# ($*)" ; exit 0 
 
-    #local RESOLUTION=800x480
-    local RESOLUTION=1600x960
-    #local RESOLUTION=2400x1440
-    #local RESOLUTION=3200x1920
 
-    local HAMCLOCKDIRECTORY=~/rpi-hamclock-web
-    local HAMCLOCKDESKTOPFILE=~/Desktop/hamclock.desktop
-
-    cat << EOF > $HAMCLOCKDESKTOP
+    # handle desktop launcher
+    mkdir -p $HAMCLOCK_DESKTOP_DIR
+    cat << EOF > $HAMCLOCK_DESKTOP_PATH
 [Desktop Entry]
 Name=HamClock
-Exec=/bin/sh -c '${HAMCLOCKDIRECTORY}/rpi-hamclock start'
-Icon=${HAMCLOCKDIRECTORY}/ESPHamClock/hamclock.png
+Exec=/bin/sh -c '$HAMCLOCK_HOME/rpi-hamclock start -s'
+Icon=$HAMCLOCK_HOME/ESPHamClock/hamclock.png
 Terminal=false
 Type=Application
 EOF
-    exit 0
+ 
 
-    sudo make g++ # libx11-dev libgpiod-dev
+    if [ "$1" = "autostart" ] ; then
+        mkdir -p $AUTOSTART_DIR
+        ln -s --target-directory=$AUTOSTART_DIR $HAMCLOCK_DESKTOP_PATH
+    else
+        [ -f  $HAMCLOCK_DESKTOP_LINK ] && rm -f $HAMCLOCK_DESKTOP_LINK   
+    fi
+
+}
+
+function install {
+    echo "-> install #$# ($*)"
+
+    # install desktop if requested
+    #[ "$1" = "-d" ] && install_desktop "$1" "$2"
+
+    sudo apt install g++ # libx11-dev libgpiod-dev
     pushd ESPHamClock
-    make hamclock-web-${RESOLUTION}
+    make ${HAMCLOCK_BUILD_TARGET}
     sudo make install
     popd
 
@@ -53,10 +97,10 @@ EOF
 }
 
 function start {
-    #echo "-> start ($1)"
+    echo "-> start #$# ($*)" ; exit 0
 
-    local HAMCLOCKURL=http://localhost:8081/live.html
-    local DELAY=1
+    local hamclockurl=http://localhost:8081/live.html
+    local delay=1
 
     # wait the desktop system
     sleep 3
@@ -64,9 +108,9 @@ function start {
     if [ "$1" = "surf" ] ; then
         
         # launch browser
-        echo launch surf $HAMCLOCKURL ...
-        surf -F $HAMCLOCKURL & SURFPID=$!
-        echo pid=$SURFPID.
+        echo launch surf $hamclockurl ...
+        surf -F $hamclockurl & surfpid=$!
+        echo pid=$surfpid.
 
         # wait for browser ...
         sleep 10
@@ -78,50 +122,56 @@ function start {
     echo pid=$!
 
     # wait for hamclock page
-    CURLERROR=1
-    until [ "${CURLERROR}" -eq "0" ] ; do
+    curlerror=1
+    until [ "${curlerror}" -eq "0" ] ; do
 	    echo check hamclock ...
-	    sleep $DELAY
-	    curl -s $HAMCLOCKURL > /dev/null
-	    CURLERROR=$?
+	    sleep $delay
+	    curl -s $hamclockurl > /dev/null
+	    curlerror=$?
     done
     echo "hamclock is up :-)"
 
     # reload page
-    kill -HUP $SURFPID
+    kill -HUP $surfpid
 
     exit 0
 }
 
 function stop {
-    #echo "-> stop"
+    echo "-> stop #$# ($*)" ; exit 0
 
     killall -q surf hamclock
     exit 0
 }
 
 function dispatch {
-
-    #echo "-> dispatch #$# ($1, $2)" 
+    echo "-> dispatch #$# ($*)"
 
     case "$1" in
 
-    update | install | stop )
+    update | stop )
         [ "$#" = "1" ] && $1
-        usage
+        help
     ;;
 
     start)
-        [ "$#" = "2" ] && [ "$2" = "-s" ] && start "surf"
-        [ "$#" = "1" ] && start
-        usage
+        [ "$#" = "2" ] && [ "$2" = "-s" ] && $1 "$2"
+        [ "$#" = "1" ] && $1
+        help
+    ;;
+
+    install)
+        [ "$#" = "3" ] && [ "$2" = "-d" ] && [ "$3" = "-a" ] && $1 "$2" "$3"
+        [ "$#" = "2" ] && [ "$2" = "-d" ] && $1 "$2"
+        [ "$#" = "1" ] && $1
+        help
     ;;
 
     *)
-        usage
+        help
     ;;
     
     esac
 }
-
-dispatch $@
+configure
+dispatch "$@"
