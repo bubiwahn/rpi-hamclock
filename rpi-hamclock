@@ -55,7 +55,7 @@ function start {
         echo pid=$SURFPID.
 
         # wait for browser ...
-        sleep 3
+        sleep 10
     fi
 
     # launch hamclock
