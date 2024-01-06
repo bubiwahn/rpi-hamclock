@@ -30,11 +30,25 @@ function install {
     #local RESOLUTION=2400x1440
     #local RESOLUTION=3200x1920
 
+    local HAMCLOCKDIRECTORY=~/rpi-hamclock-web
+    local HAMCLOCKDESKTOPFILE=~/Desktop/hamclock.desktop
+
+    cat << EOF > $HAMCLOCKDESKTOP
+[Desktop Entry]
+Name=HamClock
+Exec=/bin/sh -c '${HAMCLOCKDIRECTORY}/rpi-hamclock start'
+Icon=${HAMCLOCKDIRECTORY}/ESPHamClock/hamclock.png
+Terminal=false
+Type=Application
+EOF
+    exit 0
+
     sudo make g++ # libx11-dev libgpiod-dev
     pushd ESPHamClock
     make hamclock-web-${RESOLUTION}
     sudo make install
     popd
+
     exit 0
 }
 
