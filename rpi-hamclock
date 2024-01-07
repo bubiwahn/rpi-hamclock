@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# initialize
-function init {
+# initialize script
+function initialize {
     echo "-> init #$# ($*)"
 
     # find script location on machine
@@ -32,7 +32,8 @@ function init {
 
 # show configuration config
 function config {
-    echo "-> config #$# ($*)"
+    #echo "-> config #$# ($*)"
+    echo -n show hamclock configuration ...
 
     cat << EOM
 HAMCLOCK_HOME:                  '${HAMCLOCK_HOME}'
@@ -43,6 +44,7 @@ HAMCLOCK_DESKTOP_DIR:           '${HAMCLOCK_DESKTOP_DIR}'
 HAMCLOCK_DESKTOP_FILE:          '${HAMCLOCK_DESKTOP_FILE}'
 HAMCLOCK_AUTOSTART_DIR:         '${HAMCLOCK_AUTOSTART_DIR}'
 EOM
+    echo done.
     exit 0
 }
 
@@ -68,37 +70,9 @@ EOM
     exit 1
 }
 
-function desktop {
-    echo "-> desktop #$# ($*)" 
-
-    # handle desktop launcher
-    local desktop_dir=$HAMCLOCK_DESKTOP_DIR
-    local desktop_path=$desktop_dir/$HAMCLOCK_DESKTOP_FILE
-    mkdir -p $desktop_dir
-    cat << EOF > $desktop_path
-[Desktop Entry]
-Name=HamClock
-Exec=/bin/sh -c '$HAMCLOCK_HOME/rpi-hamclock start -s'
-Icon=$HAMCLOCK_HOME/ESPHamClock/hamclock.png
-Terminal=false
-Type=Application
-EOF
- 
-    # toggle autostart on/off if requested
-    local autostart_dir=$HAMCLOCK_AUTOSTART_DIR
-    local autostart_link=$autostart_dir/$HAMCLOCK_DESKTOP_FILE
-    if [ "$1" = "-a" ] ; then
-        mkdir -p $autostart_dir
-        ln -s --target-directory=$autostart_dir $desktop_path
-    else
-        [ -f  $autostart_link ] && rm -f $autostart_link   
-    fi
-
-    exit 0
-}
-
 function install {
-    echo "-> install #$# ($*)"
+    # echo "-> install #$# ($*)"
+    echo -n install hamclock with options "$*" ...
 
     # install hamclock
     pushd ESPHamClock
@@ -114,7 +88,7 @@ function install {
         cat << EOF > $desktop_path
 [Desktop Entry]
 Name=HamClock
-Exec=/bin/sh -c '$HAMCLOCK_HOME/rpi-hamclock start -s'
+Exec=$HAMCLOCK_HOME/rpi-hamclock start -s
 Icon=$HAMCLOCK_HOME/ESPHamClock/hamclock.png
 Terminal=false
 Type=Application
@@ -132,12 +106,14 @@ EOF
         [ -f  $autostart_link ] && rm -f $autostart_link   
     fi
 
+    echo done.
     exit 0
 }
 
 # software update process
 function update {
-    echo "-> update #$# ($*)"
+    #echo "-> update #$# ($*)"
+    echo -n update hamclock ...
 
     # download software
     sudo apt install curl unzip g++ surf
@@ -147,14 +123,16 @@ function update {
 
     # build software
     pushd ESPHamClock
-    make ${HAMCLOCK_BUILD_TARGET}
+    make -j 4 ${HAMCLOCK_BUILD_TARGET}
     popd
 
+    echo done.
     exit 0
 }
 
 function start {
-    echo "-> start #$# ($*)"
+    #echo "-> start #$# ($*)"
+    echo -n start hamclock ...
 
     local hamclock_url=http://localhost:8081/live.html
     local delay=1
@@ -188,16 +166,20 @@ function start {
     done
     echo "hamclock is up :-)"
 
-    # reload page if surf is running
+    # reload page if browser is running
     [ -n "$surf_pid" ] && kill -HUP $surf_pid
 
+    echo done.
     exit 0
 }
 
 function stop {
-    echo "-> stop #$# ($*)"
+    #echo "-> stop #$# ($*)"
+    echo -n stop hamclock ...
 
     killall -q surf hamclock
+ 
+    echo done.
     exit 0
 }
 
@@ -231,5 +213,5 @@ function dispatch {
     esac
 }
 
-init
+initialize
 dispatch "$@"
