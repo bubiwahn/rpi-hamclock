@@ -140,13 +140,12 @@ function update {
     echo "-> update #$# ($*)"
 
     # download software
-    sudo apt install curl unzip
+    sudo apt install curl unzip g++ surf
     rm -rf ESPHamClock
     curl -O $HAMCLOCK_ESPHAMCLOCK_ZIP_URL
     unzip ESPHamClock.zip
 
     # build software
-    sudo apt install g++ # libx11-dev libgpiod-dev
     pushd ESPHamClock
     make ${HAMCLOCK_BUILD_TARGET}
     popd
