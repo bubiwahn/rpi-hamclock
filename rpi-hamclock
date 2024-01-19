@@ -131,8 +131,10 @@ EOF
     if [ "$2" = "-a" ] ; then
         mkdir -p $autostart_dir
         ln -s --target-directory=$autostart_dir $desktop_path
+        echo "autostart on"
     else
         [ -f  $autostart_link ] && rm -f $autostart_link   
+        echo "autostart on"
     fi
 
     echo "done."
