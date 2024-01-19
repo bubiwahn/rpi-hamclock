@@ -114,13 +114,16 @@ EOF
 # software update process
 function update {
     #echo "-> update #$# ($*)"
-    echo -n update hamclock ...
 
     # if "-p" then git pull rpi-hamclock
     if [ "$1" = "-p" ] ; then
+        echo -n "git pull... "
         git pull
+        echo "done."
         exit 0
     fi
+
+    echo -n update hamclock ...
 
     # download hamclock software
     sudo apt install curl unzip g++ surf
