@@ -33,7 +33,7 @@ function initialize {
 # show configuration config
 function config {
     #echo "-> config #$# ($*)"
-    echo -n show hamclock configuration ...
+    echo show hamclock configuration ...
 
     cat << EOM
 HAMCLOCK_HOME:                  '${HAMCLOCK_HOME}'
