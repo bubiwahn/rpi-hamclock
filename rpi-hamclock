@@ -118,7 +118,9 @@ function update {
     # if "-p" then git pull rpi-hamclock
     if [ "$1" = "-p" ] ; then
         echo "git pull... "
+
         git pull
+
         echo "done."
         exit 0
     fi
@@ -142,7 +144,7 @@ function update {
 
 function start {
     #echo "-> start #$# ($*)"
-    echo -n start hamclock ...
+    echo start hamclock ...
 
     local hamclock_url=http://localhost:8081/live.html
     local delay=1
@@ -185,7 +187,7 @@ function start {
 
 function stop {
     #echo "-> stop #$# ($*)"
-    echo -n stop hamclock ...
+    echo stop hamclock ...
 
     killall -q surf hamclock
  
