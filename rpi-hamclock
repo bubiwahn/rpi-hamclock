@@ -74,14 +74,41 @@ EOM
     exit 1
 }
 
+
+# software update process
+function update {
+    #echo "-> update #$# ($*)"
+    echo "update with options "$*" ..."
+
+    # if "-p" then git pull rpi-hamclock
+    if [ "$1" = "-p" ] ; then
+        echo "git pull... "
+
+        git pull
+
+        echo "done."
+        exit 0
+    fi
+
+    # download hamclock software
+    sudo apt install curl unzip g++ surf
+    rm -rf ESPHamClock
+    curl -O $HAMCLOCK_ESPHAMCLOCK_ZIP_URL
+    unzip ESPHamClock.zip
+
+    # build and install software
+    pushd ESPHamClock
+    make -j 4 ${HAMCLOCK_BUILD_TARGET}
+    sudo make install
+    popd
+
+    echo "done."
+    exit 0
+}
+
 function install {
     # echo "-> install #$# ($*)"
     echo "install hamclock with options "$*" ..."
-
-    # install hamclock
-    pushd ESPHamClock
-    sudo make install
-    popd
 
     # create desktop launcher if requested
     local desktop_dir=$HAMCLOCK_DESKTOP_DIR
@@ -114,37 +141,7 @@ EOF
     exit 0
 }
 
-# software update process
-function update {
-    #echo "-> update #$# ($*)"
-
-    # if "-p" then git pull rpi-hamclock
-    if [ "$1" = "-p" ] ; then
-        echo "git pull... "
-
-        git pull
-
-        echo "done."
-        exit 0
-    fi
-
-    echo "update with options "$*" ..."
-
-    # download hamclock software
-    sudo apt install curl unzip g++ surf
-    rm -rf ESPHamClock
-    curl -O $HAMCLOCK_ESPHAMCLOCK_ZIP_URL
-    unzip ESPHamClock.zip
-
-    # build software
-    pushd ESPHamClock
-    make -j 4 ${HAMCLOCK_BUILD_TARGET}
-    popd
-
-    echo "done."
-    exit 0
-}
-
+# start service
 function start {
     #echo "-> start #$# ($*)"
     echo "start with options "$*" ..."
@@ -188,6 +185,7 @@ function start {
     exit 0
 }
 
+# stop service
 function stop {
     #echo "-> stop #$# ($*)"
     echo "stop ..."
