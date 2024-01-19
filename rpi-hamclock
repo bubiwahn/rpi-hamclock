@@ -55,7 +55,7 @@ EOM
 function help {
 
     cat << EOM 
-Web based ESPHamClock on Raspberry Pi install and admin tool.
+ESPHamClock on Raspberry Pi install and admin tool.
 
 usage:
 rpi-hamclock <TASK>
