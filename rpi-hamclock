@@ -58,7 +58,7 @@ function help {
 Web based ESPHamClock on Raspberry Pi install and admin tool.
 
 usage:
-rpi-hamclock [OPTIONS] <TASK>
+rpi-hamclock <TASK>
 
 <TASK> is one of:
     update [-p]   -> update latest software release
