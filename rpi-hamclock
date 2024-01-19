@@ -134,7 +134,7 @@ EOF
         echo "autostart on"
     else
         [ -f  $autostart_link ] && rm -f $autostart_link   
-        echo "autostart on"
+        echo "autostart off"
     fi
 
     echo "done."
