@@ -58,14 +58,14 @@ usage:
 rpi-hamclock [OPTIONS] <TASK>
 
 <TASK> is one of:
-    start [-s]          -> start service, where
-                            -s = show HamClock on local desktop
-    stop                -> stop service
     update              -> update latest software release 
     install [-d [-a]]   -> install software on machine, where
                             -d = install desktop lauchcher
                             -a = turn of autorun (default=off)
     config              -> show configuration
+    start [-s]          -> start service, where
+                            -s = show HamClock on local desktop
+    stop                -> stop service
 EOM
     exit 1
 }
