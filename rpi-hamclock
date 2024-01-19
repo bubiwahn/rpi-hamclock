@@ -128,7 +128,7 @@ EOF
     # toggle autostart on/off if requested
     local autostart_dir=$HAMCLOCK_AUTOSTART_DIR
     local autostart_link=$autostart_dir/$HAMCLOCK_DESKTOP_FILE
-    if [ "$2" = "-a" ] ; then
+    if [ "$1" = "-a" ] ; then
         mkdir -p $autostart_dir
         ln -s --target-directory=$autostart_dir $desktop_path
         echo "autostart on"
