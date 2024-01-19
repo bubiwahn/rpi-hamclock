@@ -2,7 +2,7 @@
 
 # initialize script
 function initialize {
-    echo "-> init #$# ($*)"
+    #echo "-> init #$# ($*)"
 
     # find script location on machine
     local script_path="${BASH_SOURCE}"
@@ -194,7 +194,7 @@ function stop {
 }
 
 function dispatch {
-    echo "-> dispatch #$# ($*)"
+    #echo "-> dispatch #$# ($*)"
 
     case "$1" in
 
