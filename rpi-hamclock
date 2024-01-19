@@ -61,21 +61,20 @@ usage:
 rpi-hamclock [OPTIONS] <TASK>
 
 <TASK> is one of:
-    update [-p]         -> update latest software release
-                            -p = git pull latest version of rpi-hamclock  
-    install [-d [-a]]   -> install software on machine, where
-                            -d = install desktop lauchcher
-                            -a = turn of autorun (default=off)
-    start [-s]          -> start service, where
-                            -s = show HamClock on local desktop
-    stop                -> stop service
-    config              -> show configuration
+    update [-p]   -> update latest software release
+                        -p = git pull latest version of rpi-hamclock  
+    install [-a]  -> install icon on desktop, where
+                        -a = turn on autorun (default=off)
+    start [-s]    -> start service, where
+                        -s = show HamClock on local desktop
+    stop          -> stop service
+    config        -> show configuration
 EOM
     exit 1
 }
 
 
-# software update process
+# update software
 function update {
     #echo "-> update #$# ($*)"
     echo "update with options "$*" ..."
@@ -106,6 +105,7 @@ function update {
     exit 0
 }
 
+# install on desktop
 function install {
     # echo "-> install #$# ($*)"
     echo "install hamclock with options "$*" ..."
@@ -113,10 +113,9 @@ function install {
     # create desktop launcher if requested
     local desktop_dir=$HAMCLOCK_DESKTOP_DIR
     local desktop_path=$desktop_dir/$HAMCLOCK_DESKTOP_FILE
-    [ "$1" = "-d" ] && {
 
-        mkdir -p $desktop_dir
-        cat << EOF > $desktop_path
+    mkdir -p $desktop_dir
+    cat << EOF > $desktop_path
 [Desktop Entry]
 Name=HamClock
 Exec=$HAMCLOCK_HOME/rpi-hamclock start -s
@@ -124,8 +123,7 @@ Icon=$HAMCLOCK_HOME/ESPHamClock/hamclock.png
 Terminal=false
 Type=Application
 EOF
-        chmod u+x $desktop_path
-    }
+    chmod u+x $desktop_path
 
     # toggle autostart on/off if requested
     local autostart_dir=$HAMCLOCK_AUTOSTART_DIR
@@ -219,8 +217,7 @@ function dispatch {
     ;;
 
     install )
-        [ "$#" = "3" ] && [ "$2" = "-d" ] && [ "$3" = "-a" ] && $1 "$2" "$3"
-        [ "$#" = "2" ] && [ "$2" = "-d" ] && $1 "$2"
+        [ "$#" = "2" ] && [ "$2" = "-a" ] && $1 "$2"
         [ "$#" = "1" ] && $1
         help
     ;;
