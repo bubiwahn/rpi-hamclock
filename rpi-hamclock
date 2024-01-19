@@ -18,10 +18,13 @@ function initialize {
     HAMCLOCK_HOME=$script_dir
     cd $HAMCLOCK_HOME
 
+    # source default configuration config file if available
+    [ -f "rpi-hamlock.conf.template" ] && . rpi-hamlock.conf.template
+
     # source a config file if available
     [ -f "rpi-hamlock.conf" ] && . rpi-hamlock.conf
 
-    # set default values if not set
+    # set default values if nothing set
     : ${HAMCLOCK_RPIHAMCLOCK_GIT_URL:=https://github.com/bubiwahn/rpi-hamclock-web.git}  
     : ${HAMCLOCK_ESPHAMCLOCK_ZIP_URL:=https://www.clearskyinstitute.com/ham/HamClock/ESPHamClock.zip}
     : ${HAMCLOCK_BUILD_TARGET:=hamclock-web-1600x960}
@@ -33,7 +36,7 @@ function initialize {
 # show configuration config
 function config {
     #echo "-> config #$# ($*)"
-    echo rpi-hamclock configuration ...
+    echo "rpi-hamclock configuration ..."
 
     cat << EOM
 HAMCLOCK_HOME:                  '${HAMCLOCK_HOME}'
@@ -44,7 +47,7 @@ HAMCLOCK_DESKTOP_DIR:           '${HAMCLOCK_DESKTOP_DIR}'
 HAMCLOCK_DESKTOP_FILE:          '${HAMCLOCK_DESKTOP_FILE}'
 HAMCLOCK_AUTOSTART_DIR:         '${HAMCLOCK_AUTOSTART_DIR}'
 EOM
-    echo done.
+    echo "done."
     exit 0
 }
 
@@ -73,7 +76,7 @@ EOM
 
 function install {
     # echo "-> install #$# ($*)"
-    echo -n install hamclock with options "$*" ...
+    echo "install hamclock with options "$*" ..."
 
     # install hamclock
     pushd ESPHamClock
@@ -107,7 +110,7 @@ EOF
         [ -f  $autostart_link ] && rm -f $autostart_link   
     fi
 
-    echo done.
+    echo "done."
     exit 0
 }
 
@@ -125,7 +128,7 @@ function update {
         exit 0
     fi
 
-    echo -n update hamclock ...
+    echo "update with options "$*" ..."
 
     # download hamclock software
     sudo apt install curl unzip g++ surf
@@ -138,13 +141,13 @@ function update {
     make -j 4 ${HAMCLOCK_BUILD_TARGET}
     popd
 
-    echo done.
+    echo "done."
     exit 0
 }
 
 function start {
     #echo "-> start #$# ($*)"
-    echo start hamclock ...
+    echo "start with options "$*" ..."
 
     local hamclock_url=http://localhost:8081/live.html
     local delay=1
@@ -155,23 +158,23 @@ function start {
     if [ "$1" = "-s" ] ; then
         
         # launch browser
-        echo launch surf $hamclock_url ...
+        echo "launch browser ..."
         surf -F $hamclock_url & local surf_pid=$!
-        echo pid=$surf_pid.
+        echo "pid=$surf_pid."
 
         # wait for browser ...
         sleep 10
     fi
 
     # launch hamclock
-    echo hamclock ...
+    echo "launch hamclock ..."
     hamclock &
-    echo pid=$!
+    echo "pid=$!"
 
     # wait for hamclock page
     curl_error=1
     until [ "${curl_error}" -eq "0" ] ; do
-	    echo check hamclock ...
+	    echo "check hamclock ..."
 	    sleep $delay
 	    curl -s $hamclock_url > /dev/null
 	    curl_error=$?
@@ -181,17 +184,17 @@ function start {
     # reload page if browser is running
     [ -n "$surf_pid" ] && kill -HUP $surf_pid
 
-    echo done.
+    echo "done."
     exit 0
 }
 
 function stop {
     #echo "-> stop #$# ($*)"
-    echo stop hamclock ...
+    echo "stop ..."
 
     killall -q surf hamclock
  
-    echo done.
+    echo "done."
     exit 0
 }
 
