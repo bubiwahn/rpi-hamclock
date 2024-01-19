@@ -1,6 +1,25 @@
+# HamClock build targets (select one):
+
+# X11 GUI desktop version
+#HAMCLOCK_BUILD_TARGET=hamclock-800x480          # X11 GUI desktop version, AKA hamclock
+#HAMCLOCK_BUILD_TARGET=hamclock-1600x960         # X11 GUI desktop version, larger, AKA hamclock-big
+#HAMCLOCK_BUILD_TARGET=hamclock-2400x1440        # X11 GUI desktop version, larger yet
+#HAMCLOCK_BUILD_TARGET=hamclock-3200x1920        # X11 GUI desktop version, huge
+
+# web server only (no display)
+#HAMCLOCK_BUILD_TARGET=hamclock-web-800x480      # web server only (no display)
+HAMCLOCK_BUILD_TARGET=hamclock-web-1600x960     # web server only (no display), larger
+#HAMCLOCK_BUILD_TARGET=hamclock-web-2400x1440    # web server only (no display), larger yet
+#HAMCLOCK_BUILD_TARGET=hamclock-web-3200x1920    # web server only (no display), huge
+
+# RPi stand-alone /dev/fb0
+#HAMCLOCK_BUILD_TARGET=hamclock-fb0-800x480      # RPi stand-alone /dev/fb0, AKA hamclock-fb0-small
+#HAMCLOCK_BUILD_TARGET=hamclock-fb0-1600x960     # RPi stand-alone /dev/fb0, larger, AKA hamclock-fb0
+#HAMCLOCK_BUILD_TARGET=hamclock-fb0-2400x1440    # RPi stand-alone /dev/fb0, larger yet
+#HAMCLOCK_BUILD_TARGET=hamclock-fb0-3200x1920    # RPi stand-alone /dev/fb0, huge
+
 HAMCLOCK_RPIHAMCLOCK_GIT_URL=https://github.com/bubiwahn/rpi-hamclock-web.git  
 HAMCLOCK_ESPHAMCLOCK_ZIP_URL=https://www.clearskyinstitute.com/ham/HamClock/ESPHamClock.zip
-HAMCLOCK_BUILD_TARGET=hamclock-web-1600x960
 HAMCLOCK_DESKTOP_DIR=~/Desktop
 HAMCLOCK_DESKTOP_FILE=hamclock.desktop
 HAMCLOCK_AUTOSTART_DIR=~/.config/autostart
