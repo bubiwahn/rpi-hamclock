@@ -119,6 +119,7 @@ function update {
     # if "-p" then git pull rpi-hamclock
     if [ "$1" = "-p" ] ; then
         git pull
+        exit 0
     fi
 
     # download hamclock software
