@@ -117,7 +117,7 @@ function update {
 
     # if "-p" then git pull rpi-hamclock
     if [ "$1" = "-p" ] ; then
-        echo -n "git pull... "
+        echo "git pull... "
         git pull
         echo "done."
         exit 0
