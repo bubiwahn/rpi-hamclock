@@ -33,7 +33,7 @@ function initialize {
 # show configuration config
 function config {
     #echo "-> config #$# ($*)"
-    echo show hamclock configuration ...
+    echo rpi-hamclock configuration ...
 
     cat << EOM
 HAMCLOCK_HOME:                  '${HAMCLOCK_HOME}'
@@ -58,7 +58,8 @@ usage:
 rpi-hamclock [OPTIONS] <TASK>
 
 <TASK> is one of:
-    update              -> update latest software release 
+    update [-p]         -> update latest software release
+                            -p = git pull latest version of rpi-hamclock  
     install [-d [-a]]   -> install software on machine, where
                             -d = install desktop lauchcher
                             -a = turn of autorun (default=off)
@@ -115,7 +116,12 @@ function update {
     #echo "-> update #$# ($*)"
     echo -n update hamclock ...
 
-    # download software
+    # if "-p" then git pull rpi-hamclock
+    if [ "$1" = "-p" ] ; then
+        git pull
+    fi
+
+    # download hamclock software
     sudo apt install curl unzip g++ surf
     rm -rf ESPHamClock
     curl -O $HAMCLOCK_ESPHAMCLOCK_ZIP_URL
@@ -188,7 +194,13 @@ function dispatch {
 
     case "$1" in
 
-    update | stop | config )
+    stop | config )
+        [ "$#" = "1" ] && $1
+        help
+    ;;
+
+    update )
+        [ "$#" = "2" ] && [ "$2" = "-p" ] && $1 "$2"
         [ "$#" = "1" ] && $1
         help
     ;;
