@@ -19,11 +19,12 @@ HAMCLOCK_BUILD_TARGET=hamclock-web-2400x1440    # web server only (no display), 
 #HAMCLOCK_BUILD_TARGET=hamclock-fb0-3200x1920    # RPi stand-alone /dev/fb0, huge
 
 # Hamclock browser options (select one):
-#HAMCLOCK_BROWSER=surf
-HAMCLOCK_BROWSER=midori
+HAMCLOCK_BROWSER=surf
+#HAMCLOCK_BROWSER=midori
 
-# Hamclock autstart delay in secs (set appropiately):
-HAMCLOCK_AUTOSTART_DELAY=10
+# Hamclock autstart delays in secs (set appropiately):
+HAMCLOCK_AUTOSTART_DELAY_DESKTOP=5
+HAMCLOCK_AUTOSTART_DELAY_BROWSER=10
 
 HAMCLOCK_RPIHAMCLOCK_GIT_URL=https://github.com/bubiwahn/rpi-hamclock-web.git  
 HAMCLOCK_ESPHAMCLOCK_ZIP_URL=https://www.clearskyinstitute.com/ham/HamClock/ESPHamClock.zip
