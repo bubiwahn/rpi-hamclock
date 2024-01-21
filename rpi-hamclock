@@ -190,8 +190,12 @@ function start {
     echo "hamclock is up :-)"
     
     # reload page if browser is running
-    [ -n "${browser_pid}" ] && kill -HUP "${browser_pid}"
-
+    if [ "${HAMCLOCK_BROWSER}" = "surf" ] ; then
+        [ -n "${browser_pid}" ] && kill -HUP "${browser_pid}"
+    elif [ "${HAMCLOCK_BROWSER}" = "midori" ] ; then
+        midori -e tab-reload
+    fi
+    
     echo "done."
     exit 0
 }
