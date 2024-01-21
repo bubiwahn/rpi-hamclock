@@ -8,8 +8,8 @@
 
 # web server only (no display)
 #HAMCLOCK_BUILD_TARGET=hamclock-web-800x480      # web server only (no display)
-HAMCLOCK_BUILD_TARGET=hamclock-web-1600x960     # web server only (no display), larger
-#HAMCLOCK_BUILD_TARGET=hamclock-web-2400x1440    # web server only (no display), larger yet
+#HAMCLOCK_BUILD_TARGET=hamclock-web-1600x960     # web server only (no display), larger
+HAMCLOCK_BUILD_TARGET=hamclock-web-2400x1440    # web server only (no display), larger yet
 #HAMCLOCK_BUILD_TARGET=hamclock-web-3200x1920    # web server only (no display), huge
 
 # RPi stand-alone /dev/fb0
