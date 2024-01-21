@@ -177,7 +177,7 @@ function start {
             sleep 3
        elif [ "${HAMCLOCK_BROWSER}" = "midori" ] ; then
             midori -e fullscreen ${hamclock_url} &
-            sleep 5
+            sleep 3
         else
             echo "browser '${HAMCLOCK_BROWSER}' is not supported!"
             exit 1
