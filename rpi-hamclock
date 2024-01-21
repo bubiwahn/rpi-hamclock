@@ -162,6 +162,12 @@ function start {
 
     local hamclock_url=http://localhost:8081/live.html
 
+    # wait for desktop if auto started
+    [ -n "$2" ] && {
+        echo "wait $2 secs for desktop ..."
+        sleep "$2"
+    }
+
     if [ "$1" = "-s" ] ; then
         
         # launch browser
@@ -171,17 +177,12 @@ function start {
             sleep 3
        elif [ "${HAMCLOCK_BROWSER}" = "midori" ] ; then
             midori -e fullscreen ${hamclock_url} &
+            sleep 3
         else
             echo "browser '${HAMCLOCK_BROWSER}' is not supported!"
             exit 1
         fi
     fi
-
- raspi   # wait for desktop if auto started
-    [ -n "$2" ] && {
-        echo "wait $2 secs for desktop ..."
-        sleep "$2"
-    }
 
     # launch hamclock
     echo "launch hamclock ..."
