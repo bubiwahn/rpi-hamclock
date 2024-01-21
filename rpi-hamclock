@@ -26,7 +26,8 @@ function initialize {
 
     # set default values if nothing set
     : ${HAMCLOCK_BUILD_TARGET:=hamclock-web-1600x960}
-    : ${HAMCLOCK_BUILD_TARGET:=surf}
+    : ${HAMCLOCK_AUTOSTART_DELAY:=10}
+    : ${HAMCLOCK_BROWSER:=surf}
     : ${HAMCLOCK_RPIHAMCLOCK_GIT_URL:=https://github.com/bubiwahn/rpi-hamclock-web.git}  
     : ${HAMCLOCK_ESPHAMCLOCK_ZIP_URL:=https://www.clearskyinstitute.com/ham/HamClock/ESPHamClock.zip}
     : ${HAMCLOCK_DESKTOP_DIR:=~/Desktop}
@@ -41,6 +42,7 @@ function config {
 
     cat << EOM
 HAMCLOCK_HOME:                  '${HAMCLOCK_HOME}'
+HAMCLOCK_AUTOSTART_DELAY:       '${HAMCLOCK_AUTOSTART_DELAY}'
 HAMCLOCK_BROWSER:               '${HAMCLOCK_BROWSER}'
 HAMCLOCK_BUILD_TARGET:          '${HAMCLOCK_BUILD_TARGET}'
 HAMCLOCK_RPIHAMCLOCK_GIT_URL:   '${HAMCLOCK_RPIHAMCLOCK_GIT_URL}'
@@ -130,7 +132,7 @@ function install {
     cat << EOF > $desktop_path
 [Desktop Entry]
 Name=HamClock
-Exec=$HAMCLOCK_HOME/rpi-hamclock start -s 20
+Exec=$HAMCLOCK_HOME/rpi-hamclock start -s ${HAMCLOCK_AUTOSTART_DELAY}
 Icon=$HAMCLOCK_HOME/ESPHamClock/hamclock.png
 Terminal=false
 Type=Application
