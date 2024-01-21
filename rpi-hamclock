@@ -164,9 +164,9 @@ function start {
         # launch browser
         echo "launch browser ${HAMCLOCK_BROWSER} ..."
         if [ "${HAMCLOCK_BROWSER}" = "surf" ] ; then
-            surf -F $hamclock_url & local browser_pid=$!
+            surf -F ${hamclock_url} & local surf_pid=$!
         elif [ "${HAMCLOCK_BROWSER}" = "midori" ] ; then
-            midori -e fullscreen $hamclock_url & local browser_pid=$!
+            midori -e fullscreen ${hamclock_url} &
         else
             echo "browser '${HAMCLOCK_BROWSER}' is not supported!"
             exit 1
@@ -191,11 +191,11 @@ function start {
     
     # reload page if browser is running
     if [ "${HAMCLOCK_BROWSER}" = "surf" ] ; then
-        [ -n "${browser_pid}" ] && kill -HUP "${browser_pid}"
+        [ -n "${surf_pid}" ] && kill -HUP "${surf_pid}"
     elif [ "${HAMCLOCK_BROWSER}" = "midori" ] ; then
         midori -e tab-reload
     fi
-    
+
     echo "done."
     exit 0
 }
