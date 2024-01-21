@@ -18,6 +18,10 @@ HAMCLOCK_BUILD_TARGET=hamclock-web-1600x960     # web server only (no display), 
 #HAMCLOCK_BUILD_TARGET=hamclock-fb0-2400x1440    # RPi stand-alone /dev/fb0, larger yet
 #HAMCLOCK_BUILD_TARGET=hamclock-fb0-3200x1920    # RPi stand-alone /dev/fb0, huge
 
+# Hamclock browser options (select one):
+#HAMCLOCK_BROWSER=surf
+HAMCLOCK_BROWSER=midori
+
 HAMCLOCK_RPIHAMCLOCK_GIT_URL=https://github.com/bubiwahn/rpi-hamclock-web.git  
 HAMCLOCK_ESPHAMCLOCK_ZIP_URL=https://www.clearskyinstitute.com/ham/HamClock/ESPHamClock.zip
 HAMCLOCK_DESKTOP_DIR=~/Desktop

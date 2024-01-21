@@ -26,6 +26,7 @@ function initialize {
 
     # set default values if nothing set
     : ${HAMCLOCK_BUILD_TARGET:=hamclock-web-1600x960}
+    : ${HAMCLOCK_BUILD_TARGET:=surf}
     : ${HAMCLOCK_RPIHAMCLOCK_GIT_URL:=https://github.com/bubiwahn/rpi-hamclock-web.git}  
     : ${HAMCLOCK_ESPHAMCLOCK_ZIP_URL:=https://www.clearskyinstitute.com/ham/HamClock/ESPHamClock.zip}
     : ${HAMCLOCK_DESKTOP_DIR:=~/Desktop}
@@ -40,6 +41,7 @@ function config {
 
     cat << EOM
 HAMCLOCK_HOME:                  '${HAMCLOCK_HOME}'
+HAMCLOCK_BROWSER:               '${HAMCLOCK_BROWSER}'
 HAMCLOCK_BUILD_TARGET:          '${HAMCLOCK_BUILD_TARGET}'
 HAMCLOCK_RPIHAMCLOCK_GIT_URL:   '${HAMCLOCK_RPIHAMCLOCK_GIT_URL}'
 HAMCLOCK_ESPHAMCLOCK_ZIP_URL:   '${HAMCLOCK_ESPHAMCLOCK_ZIP_URL}'
@@ -90,9 +92,18 @@ function update {
     fi
 
     # download hamclock software
-    sudo apt install curl unzip g++ surf
+    sudo apt install curl unzip g++ ${HAMCLOCK_BROWSER}
+    local rc="$?"
+    [ "${rc}" != "0" ] && {
+        echo "sudo apt install failed. ${HAMCLOCK_BROWSER} might not be available."
+        exit "$rc"
+    }
     rm -rf ESPHamClock
-    curl -O $HAMCLOCK_ESPHAMCLOCK_ZIP_URL
+    curl -O ${HAMCLOCK_ESPHAMCLOCK_ZIP_URL}
+    local rc="$?"
+    [ "${rc}" != "0" ] && {
+        echo "ESPHamClock download failed. ${HAMCLOCK_ESPHAMCLOCK_ZIP_URL} might not be available."
+    }
     unzip ESPHamClock.zip
 
     # build and install software
@@ -152,17 +163,6 @@ function start {
     # wait the desktop system
     sleep 3
 
-    if [ "$1" = "-s" ] ; then
-        
-        # launch browser
-        echo "launch browser ..."
-        surf -F $hamclock_url & local surf_pid=$!
-        echo "pid=$surf_pid."
-
-        # wait for browser ...
-        sleep 10
-    fi
-
     # launch hamclock
     echo "launch hamclock ..."
     hamclock &
@@ -178,8 +178,19 @@ function start {
     done
     echo "hamclock is up :-)"
 
-    # reload page if browser is running
-    [ -n "$surf_pid" ] && kill -HUP $surf_pid
+    if [ "$1" = "-s" ] ; then
+        
+        # launch browser
+        echo "launch browser ${HAMCLOCK_BROWSER} ..."
+        if [ "${HAMCLOCK_BROWSER}" = "surf"] ; then
+            surf -F $hamclock_url
+        elif [ "${HAMCLOCK_BROWSER}" = "midori"] ; then
+            midori -e fullscreen $hamclock_url
+        else
+            echo "browser '${HAMCLOCK_BROWSER}' is not supported!"
+            exit 1
+        fi
+    fi
 
     echo "done."
     exit 0
