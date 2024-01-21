@@ -158,17 +158,28 @@ function start {
     echo "start with options "$*" ..."
 
     local hamclock_url=http://localhost:8081/live.html
-    local delay=1
 
-    # wait the desktop system
-    sleep 3
+    if [ "$1" = "-s" ] ; then
+        
+        # launch browser
+        echo "launch browser ${HAMCLOCK_BROWSER} ..."
+        if [ "${HAMCLOCK_BROWSER}" = "surf" ] ; then
+            surf -F $hamclock_url & local browser_pid=$!
+        elif [ "${HAMCLOCK_BROWSER}" = "midori" ] ; then
+            midori -e fullscreen $hamclock_url & local browser_pid=$!
+        else
+            echo "browser '${HAMCLOCK_BROWSER}' is not supported!"
+            exit 1
+        fi
+    fi
 
     # launch hamclock
     echo "launch hamclock ..."
     hamclock &
-    echo "pid=$!"
+    echo "hamclock_pid=$!"
 
     # wait for hamclock page
+    local delay=1
     curl_error=1
     until [ "${curl_error}" -eq "0" ] ; do
 	    echo "check hamclock ..."
@@ -177,20 +188,9 @@ function start {
 	    curl_error=$?
     done
     echo "hamclock is up :-)"
-
-    if [ "$1" = "-s" ] ; then
-        
-        # launch browser
-        echo "launch browser ${HAMCLOCK_BROWSER} ..."
-        if [ "${HAMCLOCK_BROWSER}" = "surf" ] ; then
-            surf -F $hamclock_url
-        elif [ "${HAMCLOCK_BROWSER}" = "midori" ] ; then
-            midori -e fullscreen $hamclock_url
-        else
-            echo "browser '${HAMCLOCK_BROWSER}' is not supported!"
-            exit 1
-        fi
-    fi
+    
+    # reload page if browser is running
+    [ -n "${browser_pid}" ] && kill -HUP $surf_pid
 
     echo "done."
     exit 0
