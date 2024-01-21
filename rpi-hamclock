@@ -145,7 +145,7 @@ EOF
     if [ "$1" = "-a" ] ; then
         mkdir -p ${autostart_dir}
         ln -f -s --target-directory=${autostart_dir} ${desktop_path}
-        echo "autostart on"
+        echo "autostart on (delay=${HAMCLOCK_AUTOSTART_DELAY} secs)"
     else
         [ -f  "${autostart_link}" ] && rm -f "${autostart_link}"   
         echo "autostart off"
@@ -177,7 +177,7 @@ function start {
         fi
     fi
 
-    # wait for desktop if auto started
+ raspi   # wait for desktop if auto started
     [ -n "$2" ] && {
         echo "wait $2 secs for desktop ..."
         sleep "$2"
