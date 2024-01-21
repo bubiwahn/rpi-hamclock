@@ -190,7 +190,7 @@ function start {
     echo "hamclock is up :-)"
     
     # reload page if browser is running
-    [ -n "${browser_pid}" ] && kill -HUP $surf_pid
+    [ -n "${browser_pid}" ] && kill -HUP "${browser_pid}"
 
     echo "done."
     exit 0
