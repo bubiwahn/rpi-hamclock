@@ -182,9 +182,9 @@ function start {
         
         # launch browser
         echo "launch browser ${HAMCLOCK_BROWSER} ..."
-        if [ "${HAMCLOCK_BROWSER}" = "surf"] ; then
+        if [ "${HAMCLOCK_BROWSER}" = "surf" ] ; then
             surf -F $hamclock_url
-        elif [ "${HAMCLOCK_BROWSER}" = "midori"] ; then
+        elif [ "${HAMCLOCK_BROWSER}" = "midori" ] ; then
             midori -e fullscreen $hamclock_url
         else
             echo "browser '${HAMCLOCK_BROWSER}' is not supported!"
