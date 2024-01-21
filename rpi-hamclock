@@ -130,7 +130,7 @@ function install {
     cat << EOF > $desktop_path
 [Desktop Entry]
 Name=HamClock
-Exec=$HAMCLOCK_HOME/rpi-hamclock start -s
+Exec=$HAMCLOCK_HOME/rpi-hamclock start -s 20
 Icon=$HAMCLOCK_HOME/ESPHamClock/hamclock.png
 Terminal=false
 Type=Application
