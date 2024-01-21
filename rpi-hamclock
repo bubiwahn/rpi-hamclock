@@ -201,7 +201,7 @@ function stop {
     #echo "-> stop #$# ($*)"
     echo "stop ..."
 
-    killall -q surf hamclock
+    killall ${HAMCLOCK_BROWSER} hamclock
  
     echo "done."
     exit 0
