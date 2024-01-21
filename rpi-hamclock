@@ -174,15 +174,21 @@ function start {
         echo "launch browser ${HAMCLOCK_BROWSER} ..."
         if [ "${HAMCLOCK_BROWSER}" = "surf" ] ; then
             surf -F ${hamclock_url} & local surf_pid=$!
-            sleep 3
+            sleep 10
        elif [ "${HAMCLOCK_BROWSER}" = "midori" ] ; then
             midori -e fullscreen ${hamclock_url} &
-            sleep 3
+            sleep 10
         else
             echo "browser '${HAMCLOCK_BROWSER}' is not supported!"
             exit 1
         fi
     fi
+
+    # wait for browsers if auto started
+    [ -n "$2" ] && {
+        echo "wait $2 secs for browsers ..."
+        sleep "$2"
+    }
 
     # launch hamclock
     echo "launch hamclock ..."
