@@ -63,14 +63,15 @@ usage:
 rpi-hamclock <TASK>
 
 <TASK> is one of:
-    update [-p]   -> update latest software release
-                        -p = git pull latest version of rpi-hamclock  
-    install [-a]  -> install icon on desktop, where
-                        -a = turn on autorun (default=off)
-    start [-s]    -> start service, where
-                        -s = show HamClock on local desktop
-    stop          -> stop service
-    config        -> show configuration
+    update [-p]         -> update latest software release
+                            -p = git pull latest version of rpi-hamclock  
+    install [-a]        -> install icon on desktop, where
+                            -a = turn on autorun (default=off)
+    start [-s [delay]]  -> start service, where
+                            -s = show HamClock on local desktop
+                            delay = optional delay for autostart after boot
+    stop                -> stop service
+    config              -> show configuration
 EOM
     exit 1
 }
@@ -159,6 +160,12 @@ function start {
 
     local hamclock_url=http://localhost:8081/live.html
 
+    # wait for desktop if auto started
+    [ -n "$2" ] && {
+        echo "wait $2 secs for desktop ..."
+        sleep "$2"
+    }
+
     if [ "$1" = "-s" ] ; then
         
         # launch browser
@@ -229,7 +236,7 @@ function dispatch {
     ;;
 
     start )
-        [ "$#" = "2" ] && [ "$2" = "-s" ] && $1 "$2"
+        [ "$#" = "2" ] && [ "$2" = "-s" ] && $1 "$2" "$3"
         [ "$#" = "1" ] && $1
         help
     ;;
