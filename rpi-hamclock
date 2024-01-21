@@ -137,14 +137,14 @@ EOF
     chmod u+x $desktop_path
 
     # toggle autostart on/off if requested
-    local autostart_dir=$HAMCLOCK_AUTOSTART_DIR
-    local autostart_link=$autostart_dir/$HAMCLOCK_DESKTOP_FILE
+    local autostart_dir=${HAMCLOCK_AUTOSTART_DIR}
+    local autostart_link=${autostart_dir}/${HAMCLOCK_DESKTOP_FILE}
     if [ "$1" = "-a" ] ; then
-        mkdir -p $autostart_dir
-        ln -s --target-directory=$autostart_dir $desktop_path
+        mkdir -p ${autostart_dir}
+        ln -s --target-directory=${autostart_dir} ${desktop_path}
         echo "autostart on"
     else
-        [ -f  $autostart_link ] && rm -f $autostart_link   
+        [ -f  "${autostart_link}" ] && rm -f "${autostart_link}"   
         echo "autostart off"
     fi
 
